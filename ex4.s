@@ -1,4 +1,4 @@
-	.file	"ex3.c"
+	.file	"ex4.c"
 	.section	.rodata
 .LC0:
 	.string	"I am %d years old.\n"
@@ -18,7 +18,6 @@ main:
 	andl	$-16, %esp
 	subl	$32, %esp
 	movl	$10, 28(%esp)
-	movl	$72, 24(%esp)
 	movl	$.LC0, (%esp)
 	call	printf
 	movl	24(%esp), %eax
