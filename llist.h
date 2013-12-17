@@ -1,4 +1,5 @@
-#include <stdio.h>
+#ifndef _LLIST_H_
+#define _LLIST_H_
 
 struct llist_node {
 	int data;
@@ -9,62 +10,33 @@ struct llist_node {
 struct llist {
 	struct llist_node *begin;
 	struct llist_node *end;
+    size_t size;
 };
 
+/**
+ * node: ptr to llist_node
+ * list: list to traverse
+ */
+#define LL_TRAVERSE_FWD(node, list) for(node = list->begin; node; node = node->next)
+#define LL_TRAVERSE_BKWD(node, list) for(node = list->end; node; node = node->prev)
 
+typedef int (*map_cb)(const int *data);
+typedef int (*_filter_pred)(const int *data);
 
-struct llist *llist_create()
-{
-	struct llist *ll = malloc(sizeof(struct llist));
-	if(!ll) {
-		printf("ERROR: Memory error");
-		exit(1);
-	}
+/**
+ * Implemented in llist.c
+ */
+struct llist_node *llist_create_node(int data);
+struct llist *llist_create();
+void llist_destroy(struct llist *ll);
+void llist_insert_before(struct llist *ll, struct llist_node *node, struct llist_node *new_node);
+void llist_insert_after(struct llist *ll, struct llist_node *node, struct llist_node *new_node);
+void llist_append(struct llist *ll, struct llist_node *new_node);
+void llist_prepend(struct llist *ll, struct llist_node *new_node);
+void llist_remove(struct llist *ll, struct llist_node *node);
+void llist_print(struct llist *ll);
 
-	ll->begin = NULL;
-	ll->end = NULL;
+void llist_map(struct llist *ll, map_cb map);
+void llist_filter(struct llist *ll, _filter_pred filter);
 
-	return ll;
-}
-
-void llist_insert_before(int data, struct llist_node node)
-{
-	if(!node) {
-		return;
-	}
-
-	struct llist_node n_new = malloc(sizeof(struct llist_node));
-	if(!n_new) {
-		printf("ERROR: Memory error");
-		exit(1);
-	}
-
-	n_new->prev = node->prev;
-	n_new->next = node;
-	node->prev = n_new;
-	if(node->prev) {
-		node->prev->next = n_new;
-	}
-}
-
-void llist_insert_after(int data, struct llist_node node)
-{
-	if(!node) {
-		return;
-	}
-	
-	struct llist_node n_new = malloc(sizeof(struct llist_node));
-	if(!n_new) {
-		printf("ERROR: Memory error");
-		exit(1);
-	}
-
-	n_new->prev = node;
-	n_new->next = node->next;
-	node->next = n_new;	
-	if(node->next) {
-		node->next->prev = n_new;
-	}
-}
-
-	
+#endif /* _LLIST_H_ */
