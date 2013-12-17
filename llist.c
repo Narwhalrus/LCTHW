@@ -9,10 +9,10 @@
 struct llist_node *llist_create_node(int data)
 {
     struct llist_node *node = malloc(sizeof(struct llist_node));
-	if(!node) {
-		printf("ERROR: Memory error");
-		exit(1);
-	}
+        if(!node) {
+                printf("ERROR: Memory error");
+                exit(1);
+        }
 
     node->data = data;
     node->next = NULL;
@@ -23,16 +23,47 @@ struct llist_node *llist_create_node(int data)
 
 struct llist *llist_create()
 {
+        struct llist *ll = malloc(sizeof(struct llist));
+        if(!ll) {
+                printf("ERROR: Memory error");
+                exit(1);
+        }
+
+        ll->begin = NULL;
+        ll->end = NULL;
+
+        return ll;
+}
+
+struct llist *llist_from_array(size_t size, int *arr)
+{
+	int i;
 	struct llist *ll = malloc(sizeof(struct llist));
-	if(!ll) {
-		printf("ERROR: Memory error");
-		exit(1);
+	
+	for(i = 0; i < size; i++) {
+		llist_append(ll, llist_create_node(arr[i]));
 	}
 
-	ll->begin = NULL;
-	ll->end = NULL;
-
 	return ll;
+}
+
+int *llist_to_array(struct llist *ll) 
+{
+	int i;
+	int *arr = malloc(sizeof(int) * ll->size);
+	if(!arr) {
+                printf("ERROR: Memory error");
+                exit(1);
+    }
+
+	i = 0;
+	struct llist_node *loop_node;
+	LL_TRAVERSE_FWD(loop_node, ll) {
+		arr[i] = loop_node->data;
+		i++;
+	}
+		
+	return arr;		
 }
 
 void llist_destroy(struct llist *ll)
@@ -53,32 +84,32 @@ void llist_destroy(struct llist *ll)
 
 void llist_insert_before(struct llist *ll, struct llist_node *node, struct llist_node *new_node)
 {
-	if(!node) {
-		return;
-	}
+        if(!node) {
+                return;
+        }
 
-	new_node->prev = node->prev;
-	new_node->next = node;
-	if(node->prev) {
-		node->prev->next = new_node;
-	} else {
+        new_node->prev = node->prev;
+        new_node->next = node;
+        if(node->prev) {
+                node->prev->next = new_node;
+        } else {
         ll->begin = new_node;
     }
-	node->prev = new_node;
+        node->prev = new_node;
     ll->size++;
 }
 
 void llist_insert_after(struct llist *ll, struct llist_node *node, struct llist_node *new_node)
 {
-	if(!node) {
-		return;
-	}
+        if(!node) {
+                return;
+        }
 
-	new_node->prev = node;
-	new_node->next = node->next;
-	if(node->next) {
-		node->next->prev = new_node;
-	} else {
+        new_node->prev = node;
+        new_node->next = node->next;
+        if(node->next) {
+                node->next->prev = new_node;
+        } else {
         ll->end = new_node;
     }
     node->next = new_node;
@@ -165,3 +196,23 @@ void llist_filter(struct llist *ll, _filter_pred filter)
         loop_node = temp;
     }     
 }
+
+struct llist *llist_concat(size_t num, ...)
+{
+	int i;
+	
+	va_list args;
+	va_start(args, num);
+
+	struct llist *ll = llist_create();
+
+	struct llist_node *loop_node;
+	for(i = 0; i < num; i++) {
+		LL_TRAVERSE_FWD(loop_node, va_arg(args, struct llist *)) {
+			llist_append(ll, llist_create_node(loop_node->data));
+		}
+	}
+
+	return ll;
+}
+
