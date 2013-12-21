@@ -1,0 +1,41 @@
+#!/bin/bash
+
+echo "Creating database... arg = c"
+./ex17 test.db c 3 100
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Inserting a row... arg = s"
+./ex17 test.db s 0 Josh josh@gmail.com
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Inserting another row... arg = s"
+./ex17 test.db s 1 NotJosh notjosh@notgmail.com
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Listing database... arg = l"
+./ex17 test.db l
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Getting the first entry... arg = f"
+./ex17 test.db g 0
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Getting the first entry... arg = f"
+./ex17 test.db g 1
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Deleting the first entry... arg = d"
+./ex17 test.db d 0
+
+read -n1 -r -p "Press any key to continue..." key
+
+echo "Deleting the second entry... arg = d"
+./ex17 test.db d 1
+
+read -n1 -r -p "Press any key to exit..." key
