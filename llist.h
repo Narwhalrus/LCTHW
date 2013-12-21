@@ -4,14 +4,14 @@
 #include <stdarg.h>
 
 struct llist_node {
-        int data;
-        struct llist_node *prev;
-        struct llist_node *next;
+    int data;
+    struct llist_node *prev;
+    struct llist_node *next;
 };
 
 struct llist {
-        struct llist_node *begin;
-        struct llist_node *end;
+    struct llist_node *begin;
+    struct llist_node *end;
     size_t size;
 };
 
@@ -44,4 +44,5 @@ void llist_map(struct llist *ll, map_cb map);
 void llist_filter(struct llist *ll, _filter_pred filter);
 struct llist *llist_concat(size_t num, ...);
 
+struct llist *nsqsort(struct llist *ll);
 #endif /* _LLIST_H_ */

@@ -9,10 +9,10 @@
 struct llist_node *llist_create_node(int data)
 {
     struct llist_node *node = malloc(sizeof(struct llist_node));
-        if(!node) {
-                printf("ERROR: Memory error");
-                exit(1);
-        }
+    if(!node) {
+        printf("ERROR: Memory error");
+        exit(1);
+    }
 
     node->data = data;
     node->next = NULL;
@@ -31,6 +31,7 @@ struct llist *llist_create()
 
         ll->begin = NULL;
         ll->end = NULL;
+        ll->size = 0;
 
         return ll;
 }
@@ -38,7 +39,7 @@ struct llist *llist_create()
 struct llist *llist_from_array(size_t size, int *arr)
 {
 	int i;
-	struct llist *ll = malloc(sizeof(struct llist));
+	struct llist *ll = llist_create(); 
 	
 	for(i = 0; i < size; i++) {
 		llist_append(ll, llist_create_node(arr[i]));
@@ -216,3 +217,37 @@ struct llist *llist_concat(size_t num, ...)
 	return ll;
 }
 
+// Works great! Just leaks memory!
+struct llist *nsqsort(struct llist *ll)
+{
+    if(ll->size <= 1) {
+        return ll;
+    }
+    
+    struct llist *pivot = llist_create();
+    struct llist *less = llist_create();
+    struct llist *greater = llist_create();
+    struct llist *sorted_ll;
+
+    // Select and remove pivot
+    llist_append(pivot, llist_create_node(ll->begin->data));
+    llist_remove(ll, ll->begin);
+
+    struct llist_node *loop_node;
+    LL_TRAVERSE_FWD(loop_node, ll) {
+        if(loop_node->data < pivot->begin->data) {
+            llist_append(less, llist_create_node(loop_node->data));
+        } else {
+            llist_append(greater, llist_create_node(loop_node->data));
+        }
+    }
+   
+    // How free... 
+    sorted_ll = llist_concat(3, nsqsort(less), pivot, nsqsort(greater));
+    
+    llist_destroy(less);
+    llist_destroy(pivot);
+    llist_destroy(greater);
+
+    return sorted_ll;
+}

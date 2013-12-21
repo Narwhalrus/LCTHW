@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "llist.h"
 
@@ -17,6 +18,7 @@ int main()
 {
     int i = 0;
 	int *arr = malloc(sizeof(int) * 10);
+    memset(arr, 0, sizeof(int) * 10);
 	for(i = 0; i < 10; i++) {
 		arr[i] = i*3;
 	}
@@ -27,6 +29,8 @@ int main()
 	struct llist *ll = llist_create();
 	struct llist *ll_2 = llist_create();
 	struct llist *ll_concat;
+    struct llist *sorted_ll;
+
     llist_append(ll, begin);
 	llist_append(ll_2, llist_create_node(0));
 
@@ -95,13 +99,21 @@ int main()
 	for(i = 0; i < ll_concat->size; i++) {
 		printf("%d ", res_arr[i]);
 	}
-	printf("\n");
+	printf("\n\n");
+
+    printf("Quicksort algorithm...\n");
+    printf("Before: ");
+    llist_print(ll_concat);
+    sorted_ll = nsqsort(ll_concat);
+    printf("After:  ");
+    llist_print(sorted_ll);
 
 	free(res_arr);
 	free(arr);
+    llist_destroy(arrll);
     llist_destroy(ll);
 	llist_destroy(ll_2);
 	llist_destroy(ll_concat);
-
+    llist_destroy(sorted_ll);
     return 0;
 }

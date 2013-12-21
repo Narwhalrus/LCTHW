@@ -24,8 +24,14 @@ void *create_memory_space(void)
 	return (void *)buffer;
 }
 
+void alter_memory(void *buffer, unsigned int offset) 
+{
+    *(unsigned char *)(buffer + offset) = 0xFF;
+}
+
 void destroy_memory_space(void *buffer) {
 	if(buffer) {
 		free(buffer);
 	}
 }
+
