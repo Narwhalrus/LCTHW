@@ -15,6 +15,8 @@ void *create_memory_space(void)
 		return NULL;
 	}	
 
+	printf("C addr: %p\n", buffer);
+
 	for(i = 0; i < 200; i++) {
 		buffer[i] = i;
 	}
