@@ -4,8 +4,29 @@
 extern "C" {
 #endif
 
+struct TStruct 
+{
+    int a;
+    char b;
+    float c;
+    double d;
+};
+
+struct TStruct2
+{
+    int a;
+    char spares[10];
+    int b;
+};
+
 void *create_memory_space(void);
-void alter_memory(void *buffer, size_t offset);
+struct TStruct *create_struct(void);
+struct TStruct2 *create_struct2(void);
+void print_struct(struct TStruct *mem);
+void print_struct2(struct TStruct2 *mem);
+void free_struct(struct TStruct *mem);
+void alter_memory(void *buffer, unsigned int offset);
+void get_memory(void *buffer, unsigned int offset); 
 void destroy_memory_space(void *buffer);
 
 #ifdef __cplusplus
