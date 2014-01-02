@@ -20,31 +20,33 @@ class TStruct2(Structure):
         ("b", c_int)
     ]
 
-class VoidPtrWrapper:
+class ByteBuffer:
     def __init__(self, ptr):
         # This is of type c_void_p
         self.ptr = ptr
 
-    def as_int32(self):
-        return cast(self.ptr, POINTER(c_int))[0]
+    def as_int32(self, idx = 0):
+        print "idx"
+        print idx
+        return cast(self.ptr, POINTER(c_int))[idx]
 
-    def as_uint32(self):
-        return cast(self.ptr, POINTER(c_uint))[0]
+    def as_uint32(self, idx = 0):
+        return cast(self.ptr, POINTER(c_uint))[idx]
 
-    def as_byte(self):
-        return cast(self.ptr, POINTER(c_byte))[0]
+    def as_byte(self, idx = 0):
+        return cast(self.ptr, POINTER(c_byte))[idx]
 
-    def as_ubyte(self):
-        return cast(self.ptr, POINTER(c_ubyte))[0]
+    def as_ubyte(self, idx = 0):
+        return cast(self.ptr, POINTER(c_ubyte))[idx]
 
-    def as_float32(self):
-        return cast(self.ptr, POINTER(c_float))[0]
+    def as_float32(self, idx = 0):
+        return cast(self.ptr, POINTER(c_float))[idx]
 
-    def to_int32(self, val):
-        cast(self.ptr, POINTER(c_int))[0] = val
+    def to_int32(self, val, idx = 0):
+        cast(self.ptr, POINTER(c_int))[idx] = val
 
-    def to_float32(self, val):
-        cast(self.ptr, POINTER(c_float))[0] = val
+    def to_float32(self, val, idx = 0):
+        cast(self.ptr, POINTER(c_float))[idx] = val
 
 class MemRegion:
     def __init__(self, base_ptr, size):
@@ -54,7 +56,7 @@ class MemRegion:
     def __getitem__(self, index):
         if index > self.size:
             raise IndexError 
-        return VoidPtrWrapper(self.base + index)
+        return ByteBuffer(self.base + index)
 
 
 clib = CDLL('./libtest.so')
@@ -86,7 +88,7 @@ print "Before alter mem:", cast(raw_ptr+offset.value, POINTER(c_ubyte))[0]
 clib.get_memory.restype = None
 clib.get_memory.argtypes = [c_void_p, c_uint]
 
-ptr_wrap = VoidPtrWrapper(raw_ptr + 4)
+ptr_wrap = ByteBuffer(raw_ptr + 4)
 
 print "Altering memory on python side"
 print "Before: "
@@ -102,7 +104,11 @@ print my_ptr[4].as_float32()
 my_ptr[4].to_float32(2.0)
 print my_ptr[4].as_float32()
 
-my_ptr[4].to_int32(21)
+my_ptr[8].to_int32(21)
+my_ptr[4].to_int32(22)
+print "things..."
+print my_ptr[4].as_int32()
+print my_ptr[4].as_int32(1)
 clib.get_memory(raw_ptr, 4)
 
 clib.create_struct.restypes = POINTER(TStruct)
