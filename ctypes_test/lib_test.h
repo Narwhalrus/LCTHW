@@ -21,6 +21,7 @@ struct TStruct2
 
 void *create_memory_space(void);
 struct TStruct *create_struct(void);
+void *create_struct_v(void);
 struct TStruct2 *create_struct2(void);
 void print_struct(struct TStruct *mem);
 void print_struct2(struct TStruct2 *mem);

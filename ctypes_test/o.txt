@@ -1,0 +1,142 @@
+#ifndef _LIB_TEST_H_
+#define _LIB_TEST_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct TStruct 
+{
+    int a;
+    char b;
+    float c;
+    double d;
+};
+
+struct TStruct2
+{
+    int a;
+    char spares[10];
+    int b;
+};
+
+void *create_memory_space(void);
+struct TStruct *create_struct(void);
+struct TStruct2 *create_struct2(void);
+void print_struct(struct TStruct *mem);
+void print_struct2(struct TStruct2 *mem);
+void free_struct(struct TStruct *mem);
+void alter_memory(void *buffer, unsigned int offset);
+void get_memory(void *buffer, unsigned int offset); 
+void destroy_memory_space(void *buffer);
+
+#ifdef __cplusplus
+}
+#endif
+#endif /* _LIB_TEST_H_ */
+
+[Token(Type = 0, Value = ifndef), Token(Type = 0, Value = _LIB_TEST_H_), Token(Type = 0, Value = define), Token(Type = 0, Value = _LIB_TEST_H_), Token(Type = 0, Value = ifdef), Token(Type = 0, Value = __cplusplus), Token(Type = 0, Value = extern), Token(Type = 0, Value = C), Token(Type = 2, Value = {), Token(Type = 0, Value = endif), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct), Token(Type = 2, Value = {), Token(Type = 0, Value = int), Token(Type = 0, Value = a), Token(Type = 4, Value = ;), Token(Type = 0, Value = char), Token(Type = 0, Value = b), Token(Type = 4, Value = ;), Token(Type = 0, Value = float), Token(Type = 0, Value = c), Token(Type = 4, Value = ;), Token(Type = 0, Value = double), Token(Type = 0, Value = d), Token(Type = 4, Value = ;), Token(Type = 3, Value = }), Token(Type = 4, Value = ;), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct2), Token(Type = 2, Value = {), Token(Type = 0, Value = int), Token(Type = 0, Value = a), Token(Type = 4, Value = ;), Token(Type = 0, Value = char), Token(Type = 0, Value = spares), Token(Type = 1, Value = [10]), Token(Type = 4, Value = ;), Token(Type = 0, Value = int), Token(Type = 0, Value = b), Token(Type = 4, Value = ;), Token(Type = 3, Value = }), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = create_memory_space), Token(Type = 0, Value = void), Token(Type = 4, Value = ;), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct), Token(Type = 0, Value = create_struct), Token(Type = 0, Value = void), Token(Type = 4, Value = ;), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct2), Token(Type = 0, Value = create_struct2), Token(Type = 0, Value = void), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = print_struct), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct), Token(Type = 0, Value = mem), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = print_struct2), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct2), Token(Type = 0, Value = mem), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = free_struct), Token(Type = 0, Value = struct), Token(Type = 0, Value = TStruct), Token(Type = 0, Value = mem), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = alter_memory), Token(Type = 0, Value = void), Token(Type = 0, Value = buffer), Token(Type = 0, Value = unsigned), Token(Type = 0, Value = int), Token(Type = 0, Value = offset), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = get_memory), Token(Type = 0, Value = void), Token(Type = 0, Value = buffer), Token(Type = 0, Value = unsigned), Token(Type = 0, Value = int), Token(Type = 0, Value = offset), Token(Type = 4, Value = ;), Token(Type = 0, Value = void), Token(Type = 0, Value = destroy_memory_space), Token(Type = 0, Value = void), Token(Type = 0, Value = buffer), Token(Type = 4, Value = ;), Token(Type = 0, Value = ifdef), Token(Type = 0, Value = __cplusplus), Token(Type = 3, Value = }), Token(Type = 0, Value = endif), Token(Type = 0, Value = endif), Token(Type = 0, Value = _LIB_TEST_H_)]
+ifndef
+_LIB_TEST_H_
+define
+_LIB_TEST_H_
+ifdef
+__cplusplus
+extern
+C
+{
+endif
+struct
+TStruct
+{
+int
+a
+;
+char
+b
+;
+float
+c
+;
+double
+d
+;
+}
+here.
+;
+struct
+TStruct2
+{
+int
+a
+;
+char
+spares
+[10]
+;
+int
+b
+;
+}
+here.
+;
+void
+create_memory_space
+void
+;
+struct
+TStruct
+create_struct
+void
+;
+struct
+TStruct2
+create_struct2
+void
+;
+void
+print_struct
+struct
+TStruct
+mem
+;
+void
+print_struct2
+struct
+TStruct2
+mem
+;
+void
+free_struct
+struct
+TStruct
+mem
+;
+void
+alter_memory
+void
+buffer
+unsigned
+int
+offset
+;
+void
+get_memory
+void
+buffer
+unsigned
+int
+offset
+;
+void
+destroy_memory_space
+void
+buffer
+;
+ifdef
+__cplusplus
+}
+endif
+endif
+_LIB_TEST_H_
+FINAL OUTPUT:
+[('a', <class 'ctypes.c_long'>), ('b', <class 'ctypes.c_byte'>), ('c', <class 'ctypes.c_float'>), ('d', <class 'ctypes.c_double'>)]

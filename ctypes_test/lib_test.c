@@ -40,6 +40,23 @@ struct TStruct *create_struct(void)
     return res;
 }
 
+void *create_struct_v(void)
+{
+    struct TStruct *res = malloc(sizeof(struct TStruct));
+    if(!res) {
+        printf("Ahh!\n");
+        return NULL;
+    }
+
+    res->a = 1;
+    res->b = 2;
+    res->c = 3.0f;
+    res->d = 4.0;
+
+    return (void *)res;
+
+}
+
 struct TStruct2 *create_struct2(void)
 {
     struct TStruct2 *res = malloc(sizeof(struct TStruct2));

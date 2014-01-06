@@ -48,8 +48,12 @@ def s_symbols(scanner, token):
 
 scanner = re.Scanner([
     (r"\w+", s_words),
-    (r"\[\d+\]", s_idx), 
-    (r"[\{\};]", s_symbols), 
+    (r"\[\d+\]", lambda scanner, token: ('idx', int(token[1:-1]))),
+    (r"\{", lambda scanner, token: ('sym', token)),
+    (r"\}", lambda scanner, token: ('sym', token)),
+    (r";", lambda scanner, token: ('sym', token)),
+    #(r"[\{\};]", s_symbols), 
+    (r"#.*\s*", lambda scanner, token: None),
     (r'.', lambda scanner, token: None),
     ], flags=re.DOTALL)
 
