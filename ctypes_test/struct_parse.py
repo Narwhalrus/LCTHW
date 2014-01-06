@@ -62,11 +62,18 @@ def lex(fileName):
         (TokenRE.LEFT_BRACE, lambda scanner, token: Token(TokenEnum.LEFT_BRACE, token)),
         (TokenRE.RIGHT_BRACE, lambda scanner, token: Token(TokenEnum.RIGHT_BRACE, token)),
         (TokenRE.SEMICOLON, lambda scanner, token: Token(TokenEnum.SEMICOLON, token)),
-        (r".", lambda scanner, token: None)
+        (r"//.*?", None),
+        (r"/\*.*?\*/", None),
+        ("#.*?\n", None),
+        (r".", None),
         ], flags=re.DOTALL)
 
     results, remainder = scanner.scan(cFile)
    
+    # debug
+    for result in results:
+        print result
+    
     return results
 
 # Lex and parse C source file to extract fields from structures.
@@ -99,7 +106,6 @@ def parse(fileName):
         if not inStruct:
             if token.tokenVal == 'struct':
                 try:
-                    
                     if (tokens[i+1].tokenType != TokenEnum.LEFT_BRACE and
                             tokens[i+2].tokenType != TokenEnum.LEFT_BRACE):
                         continue
@@ -116,6 +122,7 @@ def parse(fileName):
                     structName = "no_name"
                 state = TYPE
             elif state == TYPE:
+                # end of struct
                 if token.tokenType == TokenEnum.RIGHT_BRACE:
                     structs[structName] = fields
                     
@@ -151,7 +158,7 @@ def parse(fileName):
                
 # Test 
 if __name__ == "__main__":        
-    structs = parse("lib_test.h")["TStruct"]
-   
+    #structs = parse("lib_test.h")["TStruct"]
+    structs = parse("/mnt/drive/home/sim/intg/relentless/GarminInterface/programs/AvionicsDataServer/src/include/mmd_to_avncs.h") 
     print "FINAL OUTPUT:" 
     print structs 

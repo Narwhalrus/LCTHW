@@ -145,6 +145,7 @@ clib.print_struct(basePtr)
 print "better method b = 99"
 boundStruct.b = 99
 clib.print_struct(basePtr)
+print "Size:", sizeof(boundStruct
 
 
 my_struct2 = clib.create_struct2()
