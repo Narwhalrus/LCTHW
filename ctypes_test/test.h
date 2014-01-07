@@ -8,6 +8,20 @@ struct test_struct {
     float d;
     double e;
     int f[10];
+
+    struct {
+        int a;
+        int b;
+        float c;
+    } structy[2];
+
+    struct {
+        int lel;
+        float lel2;
+        double lel3[4];
+    } another[2];
+
+    char wub;
 };
 
 int halloFnc(int a);

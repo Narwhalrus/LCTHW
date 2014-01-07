@@ -76,89 +76,120 @@ def lex(fileName):
     
     return results
 
-# Lex and parse C source file to extract fields from structures.
-def parse(fileName):
-    # Struct parsing states
-    S_NAME = 0
-    TYPE = 1
-    NAME = 2
-    SIZE = 3
+class Parser:
+    def __init__(self):
+        self.tokens = []
 
-    # State variables
-    done = False
-    inStruct = False
-    state = S_NAME
+    def __call__(self, fileName):
+        self.tokens = lex(fileName)
+        structName = "no_name"
 
-    # Temp variables
-    structName = ""
-    typeStr = ""
-    fieldName = ""
-    fieldType = None
-    fields = []
-
-    # Return var. A dict of all structs in the input file. 
-    # Key is struct name. Value is list of fields.
-    structs = {}
-
-    tokens = lex(fileName)
- 
-    for i, token in enumerate(tokens):
-        if not inStruct:
+        self.idx = 0
+        while True:
+            token = self.tokens[self.idx]
             if token.tokenVal == 'struct':
-                try:
-                    if (tokens[i+1].tokenType != TokenEnum.LEFT_BRACE and
-                            tokens[i+2].tokenType != TokenEnum.LEFT_BRACE):
-                        continue
-                except IndexError:
-                    print "shit."
+                # Not needed
+                self.idx += 1
+                if self.tokens[self.idx].tokenType == TokenEnum.IDENTIFIER:
+                    structName = self.tokens[self.idx].tokenVal 
+                res = self._parseStruct()
+                self.idx += 1 
+                # Not needed
+                if self.tokens[self.idx].tokenType == TokenEnum.IDENTIFIER:
+                    structName = self.tokens[self.idx].tokenVal 
 
-                inStruct = True
-                state = S_NAME
-        else:
+                res.__name__ = structName
+                return res
+
+            self.idx += 1
+                        
+    def _parseStruct(self):
+        # Struct parsing states
+        S_NAME = 0
+        TYPE = 1
+        NAME = 2
+        SIZE = 3
+
+        # State variables
+        state = S_NAME
+
+        # Temp variables
+        # per struct
+        structName = ""
+        renameStruct = False
+        fields = []
+
+        # per field
+        typeStr = ""
+        fieldName = ""
+        fieldType = None
+
+        while True and self.idx < len(self.tokens) - 1:
+            token = self.tokens[self.idx]
             if state == S_NAME:
                 if token.tokenType != TokenEnum.LEFT_BRACE:
                     structName = token.tokenVal
-                else:
-                    structName = "no_name"
+                
                 state = TYPE
             elif state == TYPE:
-                # end of struct
+                # End of struct
                 if token.tokenType == TokenEnum.RIGHT_BRACE:
-                    structs[structName] = fields
-                    
-                    # reinit per struct temp vars
-                    fields = [] 
-                    structName = ""
-
-                    inStruct = False
-                    continue
-                if token.tokenVal in qualifiers:
+                    # Create and return class with constructed field list
+                    class TempStruct(ctypes.Structure):
+                        _fields_ = fields
+                    return TempStruct
+                if token.tokenVal == 'struct':
+                    # Yeah...
+                    self.idx += 1
+                    fieldType = self._parseStruct()
+                    renameStruct = True
+                    state = NAME
+                elif token.tokenVal in qualifiers:
                     typeStr += token.tokenVal + " "
                 elif token.tokenVal in i_types:
                     typeStr += token.tokenVal
+                    try:
+                        fieldType = c_type_map[typeStr]
+                    except KeyError:
+                        print "Couldn't find type %s in c_type_map." % (typeStr)
+                        break
                     state = NAME
             elif state == NAME:
                 fieldName = token.tokenVal
+                if renameStruct:
+                    # So meta...
+                    fieldType.__name__ = fieldName
+                    renameStruct = False
                 state = SIZE
             elif state == SIZE:
-                try:
-                    fieldType = c_type_map[typeStr]
-                except KeyError:
-                    print "Couldn't find type %s in c_type_map." % (typeStr)
-                    break
                 if token.tokenType == TokenEnum.IDX:
                     fieldType *= int(token.tokenVal[1:-1])
                 fields.append((fieldName, fieldType))
-                
-                # reinit per field temp vars
+    
                 typeStr = ""
                 state = TYPE
 
-    return structs
+            self.idx += 1
+
+# Bind dat shit yo!        
+parse = Parser()
                
 # Test 
 if __name__ == "__main__":        
     #structs = parse("lib_test.h")["TStruct"]
-    structs = parse("/mnt/drive/home/sim/intg/relentless/GarminInterface/programs/AvionicsDataServer/src/include/mmd_to_avncs.h") 
+    struct = parse("./test.h") 
+    print type(struct)
     print "FINAL OUTPUT:" 
-    print structs 
+    print struct._fields_
+    s = struct()
+    
+    print len(s.structy)
+
+    print s._fields_
+  
+    print 'structy:'
+    print s.structy[0]._fields_ 
+    print 'another:'
+    print s.another[0]._fields_ 
+#    print Outer._fields_
+#    s = Outer
